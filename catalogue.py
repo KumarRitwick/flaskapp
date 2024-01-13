@@ -19,15 +19,11 @@ def video_page(video):
 
     jResp = response.json()
     for index in jResp:
-        for key in index:
-            if key != "_id":
-                for key2 in index[key]:
-                    if key2 == "Name":
-                        video_name = index[key][key2]
-                    if key2 == "file":
-                        video_file = index[key][key2]
-                    if key2 == "pic":
-                        video_pic = index[key][key2]
+        for key, value in index.items():
+            if key != "_id" and isinstance(value, dict) and "file" in value:
+                video_name = value.get("Name")
+                video_file = value.get("file")
+                video_pic = value.get("pic")
 
     return render_template('video.html', name=video_name, file=video_file, pic=video_pic)
 
@@ -48,19 +44,15 @@ def cat_page():
     html = "<h2>Your Videos</h2>"
 
     if jResp:
-        first_video_uuid = jResp[0]['videos']['file']
+        first_video_uuid = jResp[0].get("file")
         return redirect(url_for('video_page', video=first_video_uuid))
 
     for index in jResp:
-        for key in index:
-            if key != "_id":
-                for key2 in index[key]:
-                    if key2 == "Name":
-                        name = index[key][key2]
-                    if key2 == "thumb":
-                        thumb = index[key][key2]
-                    if key2 == "file":
-                        uuid = index[key][key2]
+        for key, value in index.items():
+            if key != "_id" and isinstance(value, dict) and "file" in value:
+                name = value.get("Name")
+                thumb = value.get("thumb")
+                uuid = value.get("file")
 
                 html = html + '<h3>' + name + '</h3>'
                 html = html + '<a href="' + url_for('video_page', video=uuid) + '">'
