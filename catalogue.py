@@ -6,6 +6,8 @@ from flask import Flask, request, render_template, url_for
 app = Flask(__name__)
 app.debug = True
 
+BASE_VIDEO_URL = "http://34.154.15.243/mp4/"  # Update this with your actual base video URL
+
 @app.route('/Video/<video>')
 def video_page(video):
     url = 'http://34.154.15.243/myflix/videos?filter={"video.uuid":"' + video + '"}'
@@ -29,44 +31,10 @@ def video_page(video):
                     if key2 == "pic":
                         pic = index[key][key2]
     
-    return render_template('video.html', name=video, file=videofile, pic=pic)
+    full_video_url = BASE_VIDEO_URL + videofile
+    return render_template('video.html', name=video, file=full_video_url, pic=pic)
 
-@app.route('/NewVideo/<video>')
-def new_video_page(video):
-    file_name = video.split("/")[-1]
-    return render_template('video.html', name="", file=file_name, pic="")
-
-@app.route('/')
-def cat_page():
-    url = "http://35.204.223.27/myflix/videos"
-    headers = {}
-    payload = json.dumps({})
-
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
-
-    jResp = response.json()
-    html = "<h2>Your Videos</h2>"
-
-    for index in jResp:
-        for key in index:
-            if key != "_id":
-                for key2 in index[key]:
-                    if key2 == "Name":
-                        name = index[key][key2]
-                    if key2 == "thumb":
-                        thumb = index[key][key2]
-                    if key2 == "file":
-                        uuid = index[key][key2]
-
-                html = html + '<h3>' + name + '</h3>'
-                html = html + '<a href="' + url_for('new_video_page', video=uuid) + '">'
-                html = html + '<img src="http://35.204.223.27/pics/' + thumb + '">'
-                html = html + "</a>"
-
-    return html
+# ... (rest of your code)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port="5000")
