@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <link href="//vjs.zencdn.net/7.8.2/video-js.min.css" rel="stylesheet">
-    <script src="//vjs.zencdn.net/7.8.2/video.min.js"></script>
+    <!-- Head content here -->
 </head>
-
 <body>
-    <h1>{{ name }}</h1>
+    <h1>Your video</h1>
 
-    <div id="instructions">
-        <video id="my_video_1" class="video-js vjs-default-skin" width="640px" height="267px" controls preload="none"
-            poster='{{ pic }}' data-setup='{ }'>
-            <source src="http://34.154.15.243/mp4/{{ file }}" type='video/mp4' />
-        </video>
-    </div>
+    <video id="my_video_1" class="video-js vjs-default-skin" width="640px" height="267px"
+        controls preload="none" poster='{{ pic }}'
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'>
+        <source src="{{ file }}" type='video/mp4' />
+    </video>
 </body>
-
 </html>
