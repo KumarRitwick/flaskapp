@@ -35,7 +35,7 @@ def video_page(video):
 def new_video_page(video):
     # Add your logic for the new video page here
     # You can use the same template or a different one
-    return render_template('new_video_page.html', video=video)
+    return render_template('video.html', video=video)
 
 @app.route('/')
 def cat_page():
