@@ -47,9 +47,9 @@ def cat_page():
 
     html = "<h2>Your Videos</h2>"
 
-    # if jResp:
-    #     first_video_uuid = jResp[0].get("file")
-    #     return redirect(url_for('video_page', video=first_video_uuid))
+    if jResp:
+        first_video_uuid = jResp[0].get("file")
+        return redirect(url_for('video_page', video=first_video_uuid))
 
     for index in jResp:
         for key, value in index.items():
