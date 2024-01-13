@@ -33,8 +33,6 @@ def video_page(video):
 
 @app.route('/NewVideo/<video>')
 def new_video_page(video):
-    # Add your logic for the new video page here
-    # You can use the same template or a different one
     return render_template('video.html', video=video)
 
 @app.route('/')
