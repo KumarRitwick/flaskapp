@@ -1,67 +1,86 @@
-from flask import Flask, render_template, redirect, url_for
+from datetime import *
+import time
+import sys
+
 import json
 import requests
+# First we set our credentials
 
+from flask import Flask, request, session, g, redirect, url_for, abort, \
+     render_template, flash
 app = Flask(__name__)
 app.debug = True
 
 @app.route('/Video/<video>')
 def video_page(video):
-    url = 'http://34.154.15.243/myflix/videos?filter={"video.uuid":"' + video + '"}'
+    print (video)
+    url = 'http://34.154.15.243/myflix/videos?filter={"video.uuid":"'+video+'"}'
     headers = {}
-    payload = json.dumps({})
+    payload = json.dumps({ })
+    print (request.endpoint)
     response = requests.get(url)
-    
+    print (url)
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(
-            response.reason, response.status, response.text
-        )
-
+      print("Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message']))
+      return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
     jResp = response.json()
-    print("JSON Response for Video Page:", jResp)
-
-    if jResp:
-        for index in jResp:
-            for key, value in index.items():
-                if key != "_id" and isinstance(value, dict) and "file" in value:
-                    video_name = value.get("Name")
-                    video_file = value.get("file")
-                    video_pic = value.get("pic")
-
-        return render_template('video.html', name=video_name, file=video_file, pic=video_pic)
-
-    # Handle the case when jResp is empty (no videos found)
-    print("No videos found for video UUID:", video)
-    # Example: return render_template('no_videos.html')
-    return "No videos found for video UUID: {}".format(video)
+    print (type(jResp))
+    print (jResp)
+    for index in jResp:
+        for key in index:
+           if (key !="_id"):
+              print (index[key])
+              for key2 in index[key]:
+                  print (key2,index[key][key2])
+                  if (key2=="Name"):
+                      video=index[key][key2]
+                  if (key2=="file"):
+                      videofile=index[key][key2]
+                  if (key2=="pic"):
+                      pic=index[key][key2]
+    return render_template('video.html', name=video,file=videofile,pic=pic)
 
 @app.route('/')
 def cat_page():
     url = "http://35.204.223.27/myflix/videos"
     headers = {}
-    payload = json.dumps({})
+    payload = json.dumps({ })
 
     response = requests.get(url)
-
+    #print (response)
+    # exit if status code is not ok
+    print (response)
+    print (response.status_code)
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(
-            response.reason, response.status, response.text
-        )
-
+      print("Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message']))
+      return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
     jResp = response.json()
-    print("JSON Response for Main Page:", jResp)
+    print (type(jResp))
+    html="<h2> Your Videos</h2>"
+    for index in jResp:
+       #print (json.dumps(index))
+       print ("----------------")
+       for key in index:
 
-    html = "<h2>Your Videos</h2>"
+           if (key !="_id"):
+              print (index[key])
+              for key2 in index[key]:
+                  print (key2,index[key][key2])
+                  if (key2=="Name"):
+                      name=index[key][key2]
+                  if (key2=="thumb"):
+                      thumb=index[key][key2]
+                  if (key2=="file"):
+                      uuid=index[key][key2]  
+              html=html+'<h3>'+name+'</h3>'
+              ServerIP=request.host.split(':')[0]
+              html=html+'<a href="http://34.154.15.243/mp4/'+uuid+'">'
+              html=html+'<img src="http://35.204.223.27/pics/'+thumb+'">'
+              html=html+"</a>"        
+              print("=======================")
 
-    if jResp:
-        first_video_uuid = jResp[0].get("file")
-        print("First Video UUID:", first_video_uuid)
-        return redirect(url_for('video_page', video=first_video_uuid))
+    return html
 
-    # Handle the case when jResp is empty (no videos found)
-    print("No videos found in the JSON response.")
-    # Example: return render_template('no_videos.html')
-    return "No videos found in the JSON response."
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port="5000")
+    app.run(host='0.0.0.0',port="5000")
