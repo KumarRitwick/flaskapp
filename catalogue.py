@@ -16,7 +16,7 @@ def video_page(video):
     response = requests.get(url)
     
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, response.text)
+        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status_code, response.text)
     
     jResp = response.json()
     
@@ -43,7 +43,7 @@ def cat_page():
     response = requests.get(url)
 
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, response.text)
+        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status_code, response.text)
 
     jResp = response.json()
     html = "<h2>Your Videos</h2>"
