@@ -33,7 +33,8 @@ def video_page(video):
 
 @app.route('/NewVideo/<video>')
 def new_video_page(video):
-    return render_template('video.html', video=video)
+    file_name = video.split("/")[-1]
+    return render_template('video.html', name="", file=file_name, pic="")
 
 @app.route('/')
 def cat_page():
