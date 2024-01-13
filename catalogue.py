@@ -47,9 +47,9 @@ def cat_page():
     jResp = response.json()
     html = "<h2>Your Videos</h2>"
 
-    if jResp:
-        first_video_uuid = jResp[0]['videos']['file']
-        return redirect(url_for('video_page', video=first_video_uuid))
+    # if jResp:
+    #     first_video_uuid = jResp[0]['videos']['file']
+    #     return redirect(url_for('video_page', video=first_video_uuid))
 
     for index in jResp:
         for key in index:
