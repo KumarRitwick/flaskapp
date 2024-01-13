@@ -34,12 +34,6 @@ def video_page(video):
     full_video_url = BASE_VIDEO_URL + videofile
     return render_template('video.html', name=video_name, file=full_video_url, pic=pic)
 
-@app.route('/video/<video>')
-def new_video_page(video):
-    # Add your logic for the new video page here
-    # You can use the same template or a different one
-    return render_template('video.html', name="", file="", pic="")
-
 @app.route('/')
 def cat_page():
     url = "http://35.204.223.27/myflix/videos"
@@ -66,7 +60,7 @@ def cat_page():
                         uuid = index[key][key2]
 
                 html = html + '<h3>' + name + '</h3>'
-                html = html + '<a href="' + url_for('new_video_page', video=uuid) + '">'
+                html = html + '<a href="/Video/' + uuid + '">'
                 html = html + '<img src="http://35.204.223.27/pics/' + thumb + '">'
                 html = html + "</a>"
 
