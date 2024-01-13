@@ -1,12 +1,12 @@
 from datetime import *
 import json
 import requests
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 
 app = Flask(__name__)
 app.debug = True
 
-BASE_VIDEO_URL = "http://34.172.179.74/mp4/"  # Update this with your actual base video URL
+BASE_VIDEO_URL = "http://34.154.15.243/mp4/"  # Update this with your actual base video URL
 
 @app.route('/Video/<video>')
 def video_page(video):
