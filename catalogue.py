@@ -23,14 +23,14 @@ def video_page(video):
             if key != "_id":
                 for key2 in index[key]:
                     if key2 == "Name":
-                        video = index[key][key2]
+                        video_name = index[key][key2]
                     if key2 == "file":
                         videofile = index[key][key2]
                     if key2 == "pic":
                         pic = index[key][key2]
 
     FULL_PATH = 'http://34.154.15.243/mp4/' + videofile
-    return render_template('video.html', name=video, file=FULL_PATH, pic=pic)
+    return render_template('video.html', name=video_name, file=FULL_PATH, pic=pic)
 
 @app.route('/')
 def cat_page():
