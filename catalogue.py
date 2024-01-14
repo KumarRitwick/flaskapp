@@ -61,9 +61,9 @@ def cat_page():
                         thumb = index[key][key2]
                     if key2 == "file":
                         uuid = index[key][key2]
-
+                FULL_PATH = 'http://34.154.15.243/mp4/' + uuid
                 html = html + '<h3>' + name + '</h3>'
-                html = html + '<a href="' + url_for('new_video_page', video=uuid) + '">'
+                html = html + '<a href="' + url_for('new_video_page', video=FULL_PATH) + '">'
                 html = html + '<img src="http://35.204.223.27/pics/' + thumb + '">'
                 html = html + "</a>"
 
