@@ -1,12 +1,10 @@
 from datetime import *
 import json
 import requests
-from flask import Flask, render_template
+from flask import Flask, request, render_template, url_for
 
 app = Flask(__name__)
 app.debug = True
-
-BASE_VIDEO_URL = "http://34.154.15.243/mp4/"  # Update this with your actual base video URL
 
 @app.route('/Video/<video>')
 def video_page(video):
@@ -16,7 +14,7 @@ def video_page(video):
     response = requests.get(url)
     
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status_code, response.text)
+        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
     
     jResp = response.json()
     
@@ -25,14 +23,19 @@ def video_page(video):
             if key != "_id":
                 for key2 in index[key]:
                     if key2 == "Name":
-                        video_name = index[key][key2]
+                        video = index[key][key2]
                     if key2 == "file":
                         videofile = index[key][key2]
                     if key2 == "pic":
                         pic = index[key][key2]
     
-    full_video_url = BASE_VIDEO_URL + videofile
-    return render_template('video.html', name=video_name, file=full_video_url, pic=pic)
+    return render_template('video.html', name=video, file=videofile, pic=pic)
+
+@app.route('/NewVideo/<video>')
+def new_video_page(video):
+    # Add your logic for the new video page here
+    # You can use the same template or a different one
+    return render_template('new_video_page.html', video=video)
 
 @app.route('/')
 def cat_page():
@@ -43,7 +46,7 @@ def cat_page():
     response = requests.get(url)
 
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status_code, response.text)
+        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
 
     jResp = response.json()
     html = "<h2>Your Videos</h2>"
@@ -60,7 +63,7 @@ def cat_page():
                         uuid = index[key][key2]
 
                 html = html + '<h3>' + name + '</h3>'
-                html = html + '<a href="/Video/' + uuid + '">'
+                html = html + '<a href="' + url_for('new_video_page', video=uuid) + '">'
                 html = html + '<img src="http://35.204.223.27/pics/' + thumb + '">'
                 html = html + "</a>"
 
