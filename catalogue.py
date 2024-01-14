@@ -1,7 +1,7 @@
 from datetime import *
 import json
 import requests
-from flask import Flask, request, render_template, url_for
+from flask import Flask, render_template, url_for
 
 app = Flask(__name__)
 app.debug = True
@@ -12,12 +12,12 @@ def video_page(video):
     headers = {}
     payload = json.dumps({})
     response = requests.get(url)
-    
+
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
-    
+        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status_code, response.text)
+
     jResp = response.json()
-    
+
     for index in jResp:
         for key in index:
             if key != "_id":
@@ -28,14 +28,9 @@ def video_page(video):
                         videofile = index[key][key2]
                     if key2 == "pic":
                         pic = index[key][key2]
-    
-    return render_template('video.html', name=video, file=videofile, pic=pic)
 
-@app.route('/NewVideo/<video>')
-def new_video_page(video):
-    # Add your logic for the new video page here
-    # You can use the same template or a different one
-    return render_template('video.html', video=video)
+    FULL_PATH = 'http://34.154.15.243/mp4/' + videofile
+    return render_template('video.html', name=video, file=FULL_PATH, pic=pic)
 
 @app.route('/')
 def cat_page():
@@ -46,7 +41,7 @@ def cat_page():
     response = requests.get(url)
 
     if response.status_code != 200:
-        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
+        return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status_code, response.text)
 
     jResp = response.json()
     html = "<h2>Your Videos</h2>"
@@ -61,9 +56,10 @@ def cat_page():
                         thumb = index[key][key2]
                     if key2 == "file":
                         uuid = index[key][key2]
+
                 FULL_PATH = 'http://34.154.15.243/mp4/' + uuid
                 html = html + '<h3>' + name + '</h3>'
-                html = html + '<a href="' + url_for('new_video_page', video=FULL_PATH) + '">'
+                html = html + '<a href="' + url_for('video_page', video=uuid) + '">'
                 html = html + '<img src="http://35.204.223.27/pics/' + thumb + '">'
                 html = html + "</a>"
 
