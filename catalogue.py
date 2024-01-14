@@ -8,7 +8,7 @@ app.debug = True
 
 @app.route('/Video/<video>')
 def video_page(video):
-    url = 'http://34.154.15.243/myflix/videos?filter={"video.uuid":"' + video + '"}'
+    url = 'http://34.154.127.150/myflix/videos?filter={"video.uuid":"' + video + '"}'
     headers = {}
     payload = json.dumps({})
     response = requests.get(url)
@@ -39,7 +39,7 @@ def new_video_page(video):
 
 @app.route('/')
 def cat_page():
-    url = "http://35.204.223.27/myflix/videos"
+    url = "http://34.34.30.78/myflix/videos"
     headers = {}
     payload = json.dumps({})
 
@@ -61,10 +61,10 @@ def cat_page():
                         thumb = index[key][key2]
                     if key2 == "file":
                         uuid = index[key][key2]
-                FULL_PATH = 'http://34.154.15.243/mp4/' + uuid
+                FULL_PATH = 'http://34.154.127.150/mp4/' + uuid
                 html = html + '<h3>' + name + '</h3>'
                 html = html + '<a href="' + url_for('new_video_page', video=uuid) + '">'
-                html = html + '<img src="http://35.204.223.27/pics/' + thumb + '">'
+                html = html + '<img src="http://34.34.30.78/pics/' + thumb + '">'
                 html = html + "</a>"
 
     return html
