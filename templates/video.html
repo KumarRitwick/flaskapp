@@ -4,30 +4,61 @@
 <head>
     <link href="//vjs.zencdn.net/7.8.2/video-js.min.css" rel="stylesheet">
     <script src="//vjs.zencdn.net/7.8.2/video.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #141414;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        #instructions {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #my_video_1 {
+            width: 100%;
+            height: auto;
+        }
+
+        .video-js {
+            background-color: #000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+        }
+    </style>
 </head>
 
 <body>
     <h1>{{ name }}</h1>
 
     <div id="instructions">
-        <video id="my_video_1" class="video-js vjs-default-skin" width="640px" height="267px" controls preload="none"
-            poster='{{ pic }}' data-setup='{ }'>
+        <video id="my_video_1" class="video-js vjs-default-skin" controls preload="none" poster='{{ pic }}'
+            data-setup='{ }'>
             <source id="videoSource" type='video/mp4' />
         </video>
 
         <script>
             // Get the current URL
             var currentUrl = window.location.href;
-            
+
             // Extract the video filename from the URL
             var fileName = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
-            
+
             // Build the full video URL
             var videoUrl = "http://34.154.127.150/mp4/" + fileName;
-            
+
             // Set the source attribute dynamically
             document.getElementById("videoSource").setAttribute("src", videoUrl);
-            
+
             // Initialize the video player
             var player = videojs('my_video_1');
         </script>
